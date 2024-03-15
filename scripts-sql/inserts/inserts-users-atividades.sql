@@ -1,0 +1,8 @@
+--insert into usuarios(nome, email, senha) values ('diogo', 'diogo@email.com', '@Senha123');
+--insert into usuarios(nome, email, senha) values ('iago', 'iago@email.com', '@Senha123');
+--insert into usuarios(nome, email, senha) values ('marcos', 'marcos@email.com', '@Senha123');
+--insert into usuarios(nome, email, senha) values ('tiago', 'tiago@email.com', '@Senha123');
+--
+--insert into atividades(titulo, descricao, date) values('bd2', 'revisao de bd1', current_timestamp);
+--insert into atividades(titulo, descricao, date) values('desenv movel', 'scripts sql', current_timestamp);
+--insert into atividades(titulo, descricao, date) values('sd', 'caracterização de SDs', current_timestamp);
