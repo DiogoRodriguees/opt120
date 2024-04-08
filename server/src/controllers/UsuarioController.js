@@ -3,15 +3,19 @@ const { DatabaseCLient } = require("../database/DatabaseConnection");
 class UserController {
     async create(req, res) {
         const user = req.body;
+        console.log(`Trying save user ${JSON.stringify(user)}`);
         DatabaseCLient.query(
             "insert into usuarios(nome, email, senha) values($1::varchar, $2::varchar, $3::varchar)",
             [user.nome, user.email, user.senha]
         );
+        console.log(`Create user ${user.nome} complete`);
         res.status(200).send(`Succesffully on create user: ${user}`);
     }
     async list(req, res) {
+        console.log("Trying list users");
         DatabaseCLient.query("SELECT * FROM usuarios", (err, result) => {
             if (err) res.status(404).send("Erro on select users");
+            console.log("Get complete");
             res.status(200).send(result.rows);
         });
     }

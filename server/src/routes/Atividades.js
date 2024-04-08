@@ -7,6 +7,7 @@ const Atividades = new AtividadesController();
 routeAtividades.post("/create", Atividades.create);
 routeAtividades.put("/update", Atividades.update);
 routeAtividades.get("/list", Atividades.list);
+routeAtividades.get("/list-title", Atividades.listTitle);
 routeAtividades.delete("/delete", Atividades.delete);
 
 module.exports = routeAtividades;
