@@ -4,10 +4,10 @@ const express = require("express");
 const routeAtividades = express.Router();
 const Atividades = new AtividadesController();
 
-routeAtividades.post("/create", Atividades.create);
-routeAtividades.put("/update", Atividades.update);
-routeAtividades.get("/list", Atividades.list);
+routeAtividades.post("/", Atividades.create);
+routeAtividades.put("/", Atividades.update);
+routeAtividades.get("/", Atividades.list);
 routeAtividades.get("/list-title", Atividades.listTitle);
-routeAtividades.delete("/delete", Atividades.delete);
+routeAtividades.delete("/", Atividades.delete);
 
 module.exports = routeAtividades;
