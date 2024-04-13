@@ -4,6 +4,7 @@ class UserController {
     async create(req, res) {
         const user = req.body;
         console.log(`Trying save user ${JSON.stringify(user)}`);
+
         DatabaseCLient.query(
             "insert into usuarios(nome, email, senha) values($1::varchar, $2::varchar, $3::varchar)",
             [user.nome, user.email, user.senha]
@@ -11,6 +12,7 @@ class UserController {
         console.log(`Create user ${user.nome} complete`);
         res.status(200).send(`Succesffully on create user: ${user}`);
     }
+
     async list(req, res) {
         console.log("Trying list users");
         DatabaseCLient.query("SELECT * FROM usuarios", (err, result) => {
@@ -19,9 +21,11 @@ class UserController {
             res.status(200).send(result.rows);
         });
     }
+
     async update(req, res) {
         res.status(200).send("Route update  - user");
     }
+
     async delete(req, res) {
         const { id } = req.query;
         console.log(id);
