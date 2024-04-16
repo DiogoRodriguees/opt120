@@ -1,46 +1,59 @@
-const { DatabaseCLient } = require("../database/DatabaseConnection");
-
+const { database } = require("../database/DatabaseConnection");
+const { ResponseDTO } = require("../DTOs/ResponseDTO")
 class AtividadesController {
+
     async create(req, res) {
+        console.log(`Trying create atividade: ${JSON.stringify(req.body)}`);
+
         const atividade = req.body;
-        console.log(`Trying create atividade: ${JSON.stringify(atividade)}`);
-        DatabaseCLient.query(
-            "insert into atividades(titulo, descricao, date) values($1::varchar, $2::varchar, $3::timestamp)",
-            [atividade.titulo, atividade.descricao, new Date()]
-        );
-        res.status(200).send(`Succesffully on create activities: ${atividade}`);
+        const query = "insert into atividades(titulo, descricao, date) values(?, ?, ?)";
+        const queryParams = [atividade.titulo, atividade.descricao, atividade.data]
+
+        const response = database.query(query, queryParams, (err, response) => { { err, response } });
+
+        if (response.err) {
+            res.status(404).send(`Erro ao criar atividade`);
+        } else {
+            res.status(200).send(new ResponseDTO(200, "Atividade criada com sucesso"));
+            console.log("Atividade criada com sucesso ...")
+        }
     }
+
 
     async list(req, res) {
-        DatabaseCLient.query("SELECT * FROM atividades", (err, result) => {
-            if (err) res.status(404).send("Erro on select users");
-            res.status(200).send(result.rows);
-        });
-    }
+        console.log("Trying list atividades")
+        const query = `SELECT a.id, a.titulo, a.descricao, a.date FROM atividades a`
 
-    async listTitle(req, res) {
-        console.log(`Trying list activities title`);
-        DatabaseCLient.query(
-            "SELECT atividades.titulo FROM atividades",
-            (err, result) => {
-                if (err) res.status(404).send("Erro on select users");
-                console.log(`Retuning title list: ${new Date()}`);
-                res.status(200).send(result.rows);
+        database.query(query,
+            function (err, resp) {
+                if (err) {
+                    res.status(404).send("Erro ao listar atividades")
+                } else {
+                    console.log("Success on list atividades")
+                    res.status(200).send(new ResponseDTO(200, "Listagem de atividades comcluída", resp));
+                }
             }
         );
     }
-    async update(req, res) {
-        res.status(200).send("Route update  - user");
-    }
+
     async delete(req, res) {
         const { id } = req.query;
-        console.log(id);
-        DatabaseCLient.query(
-            "update atividades set deleted_at = current_timestamp where atividades.id = $1::integer and atividades.deleted_at is null",
-            [id]
+        const query = "update atividades set deleted_at = current_timestamp where atividades.id = $1::integer and atividades.deleted_at is null"
+
+        database.query(query, [id],
+            function (err, resp) {
+
+                if (err) {
+                    res.status(404).send("Não foi deletar atividade.")
+                } else {
+                    res.status(200).send(`Atividade ${id} deletada`);
+                }
+
+            }
         );
-        res.status(200).send("Route deleteUser  - atividade");
     }
+
+
 }
 
 module.exports = { AtividadesController };

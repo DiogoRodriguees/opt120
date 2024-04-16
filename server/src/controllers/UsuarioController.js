@@ -1,35 +1,51 @@
-const { DatabaseCLient } = require("../database/DatabaseConnection");
+const { database } = require("../database/DatabaseConnection");
+const { ResponseDTO } = require("../DTOs/ResponseDTO")
 
 class UserController {
     async create(req, res) {
-        const user = req.body;
-        console.log(`Trying save user ${JSON.stringify(user)}`);
+        console.log(`Trying create user ${JSON.stringify(req.body)}`);
 
-        DatabaseCLient.query(
-            "insert into usuarios(nome, email, senha) values($1::varchar, $2::varchar, $3::varchar)",
-            [user.nome, user.email, user.senha]
+        const user = req.body;
+        const query = "insert into usuarios(nome, email, senha) values(?,?, ?)"
+        const params = [user.nome, user.email, user.senha]
+
+        database.query(query, params,
+            function (err, response) {
+                if (err) {
+                    console.log(err)
+                    if (err.code == "ER_DUP_ENTRY") {
+                        res.status(404).send(new ResponseDTO(404, "Email já foi cadastrado"));
+                    } else {
+                        res.status(404).send(new ResponseDTO(404, "Erro ao criar usuario"));
+                    }
+                } else {
+                    console.log(`Create user ${user.nome} complete ...`);
+                    res.status(200).send(new ResponseDTO(200, "Usuário criado com sucesso"));
+                }
+            }
         );
-        console.log(`Create user ${user.nome} complete`);
-        res.status(200).send(`Succesffully on create user: ${user}`);
+
     }
 
     async list(req, res) {
-        console.log("Trying list users");
-        DatabaseCLient.query("SELECT * FROM usuarios", (err, result) => {
-            if (err) res.status(404).send("Erro on select users");
-            console.log("Get complete");
-            res.status(200).send(result.rows);
-        });
-    }
+        console.log("Trying list users ...");
+        const query = "SELECT u.id, u.nome, u.email, u.senha FROM usuarios u"
 
-    async update(req, res) {
-        res.status(200).send("Route update  - user");
+        database.query(query,
+            function (err, response) {
+                if (err) {
+                    res.status(404).send(new ResponseDTO(404, "Erro ao listar usuários"));
+                } else {
+                    console.log("List users complete ...");
+                    res.status(200).send(new ResponseDTO(200, "Listagem de usuários concluída", response));
+                }
+            });
     }
 
     async delete(req, res) {
         const { id } = req.query;
         console.log(id);
-        DatabaseCLient.query(
+        database.query(
             "update usuarios set deleted_at = current_timestamp where usuarios.id = $1::integer and usuarios.deleted_at is null",
             [id]
         );
