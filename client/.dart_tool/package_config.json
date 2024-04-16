@@ -45,9 +45,15 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///home/diogo/Downloads/flutter_linux_3.19.4-stable/flutter/packages/flutter",
+      "rootUri": "file:///usr/bin/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.2"
+    },
+    {
+      "name": "flutter_datetime_picker",
+      "rootUri": "file:///home/diogo/.pub-cache/hosted/pub.dev/flutter_datetime_picker-1.5.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_lints",
@@ -57,7 +63,7 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///home/diogo/Downloads/flutter_linux_3.19.4-stable/flutter/packages/flutter_test",
+      "rootUri": "file:///usr/bin/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -72,6 +78,12 @@
       "rootUri": "file:///home/diogo/.pub-cache/hosted/pub.dev/http_parser-4.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "intl",
+      "rootUri": "file:///home/diogo/.pub-cache/hosted/pub.dev/intl-0.19.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "leak_tracker",
@@ -129,7 +141,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///home/diogo/Downloads/flutter_linux_3.19.4-stable/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///usr/bin/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -200,7 +212,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-04-08T23:27:07.724589Z",
+  "generated": "2024-04-16T20:02:38.384497Z",
   "generator": "pub",
-  "generatorVersion": "3.3.2"
+  "generatorVersion": "3.3.3"
 }
