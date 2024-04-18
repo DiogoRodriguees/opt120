@@ -35,7 +35,6 @@ class MyCustomFormState extends State<CadastrarUsuario> {
       // print(usuarios);
       final responseData = jsonDecode(response.body);
       final status = responseData["status"];
-      print(status);
       setState(() {
         _responseMessage = responseData['message'];
         _isSuccess = status == 200;

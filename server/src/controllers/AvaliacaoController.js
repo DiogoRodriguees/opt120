@@ -1,3 +1,4 @@
+const { DATETIME } = require("mysql8/lib/protocol/constants/types");
 const { database } = require("../database/DatabaseConnection");
 const { ResponseDTO } = require("../DTOs/ResponseDTO");
 
@@ -7,6 +8,7 @@ class AvaliacaoController {
     async atribuir(req, res) {
         console.log("Atribuir nota")
         const dados = req.body
+
         console.log(dados)
         database.query(
             "INSERT INTO usuario_atividade(usuario_id, atividade_id, nota, data_entrega) values(?, ?, ?, ?)",

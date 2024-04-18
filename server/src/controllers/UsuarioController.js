@@ -29,7 +29,7 @@ class UserController {
 
     async list(req, res) {
         console.log("Trying list users ...");
-        const query = "SELECT u.id, u.nome, u.email, u.senha FROM usuarios u"
+        const query = "SELECT u.id, u.nome, u.email, u.senha FROM usuarios u where u.deleted_at is null order by u.nome asc"
 
         database.query(query,
             function (err, response) {
@@ -42,14 +42,46 @@ class UserController {
             });
     }
 
-    async delete(req, res) {
-        const { id } = req.query;
-        console.log(id);
+    async update(req, res) {
+        const { id, email, nome, senha } = req.body
+        console.log(`trying update user ${id}`)
+
         database.query(
-            "update usuarios set deleted_at = current_timestamp where usuarios.id = $1::integer and usuarios.deleted_at is null",
-            [id]
+            `update usuarios set nome = ?, email = ?, senha = ?  where id = ?`,
+            [nome, email, senha, id]
+            , function (err, response) {
+                if (err) {
+                    console.log(err)
+                    if (err.code == 'ER_DUP_ENTRY') {
+                        res.status(404).send(new ResponseDTO(404, "Email já cadastrado"))
+                    } else {
+                        res.status(404).send(new ResponseDTO(404, "Erro ao atualizar usuário"));
+                    }
+                } else {
+                    console.log("Usuario atualizado com sucesso")
+                    res.status(200).send(new ResponseDTO(200, "Sucesso ao atualizar usuário"));
+                }
+            }
         );
-        res.status(200).send("Route deleteUser  - user");
+    }
+
+    async delete(req, res) {
+        const { id } = req.params;
+        console.log(`Trying delete user ${id}`);
+
+        database.query(
+            "update usuarios set deleted_at = current_timestamp where usuarios.id = ? and usuarios.deleted_at is null",
+            [id],
+            function (err, response) {
+                if (err) {
+                    console.log(err)
+                    res.status(404).send(new ResponseDTO(404, "Erro ao deletar usuário"));
+                } else {
+                    console.log(`Usuario ${id} deletedo com sucesso`)
+                    res.status(200).send(new ResponseDTO(200, "Sucesso ao deletar usuário"));
+                }
+            }
+        );
     }
 }
 

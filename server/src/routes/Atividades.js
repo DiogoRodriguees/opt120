@@ -6,6 +6,7 @@ const Atividades = new AtividadesController();
 
 routeAtividades.post("/", Atividades.create);
 routeAtividades.get("/", Atividades.list);
-routeAtividades.delete("/", Atividades.delete);
+routeAtividades.put("/:id", Atividades.update);
+routeAtividades.delete("/:id", Atividades.delete);
 
 module.exports = routeAtividades;

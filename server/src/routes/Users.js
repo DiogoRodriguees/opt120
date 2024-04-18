@@ -6,6 +6,7 @@ const Usuario = new UserController();
 
 routeUsers.post("/", Usuario.create);
 routeUsers.get("/", Usuario.list);
-routeUsers.delete("/", Usuario.delete);
+routeUsers.put("/", Usuario.update);
+routeUsers.delete("/:id", Usuario.delete);
 
 module.exports = routeUsers;

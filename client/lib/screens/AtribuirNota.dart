@@ -106,11 +106,6 @@ class _AtribuirNotaState extends State<AtribuirNota> {
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      // Form is valid, proceed with form submission
-      // You can now access _selectedTituloId and _selectedNomeId here
-      print('Selected Título ID: $_selectedTituloId');
-      print('Selected Nome ID: $_selectedNomeId');
-
       Atividade? atividadeEncontrada = _atividades.firstWhere(
         (atividade) => atividade.titulo == _selectedTituloId,
       );

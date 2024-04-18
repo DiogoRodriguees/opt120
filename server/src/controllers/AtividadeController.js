@@ -12,22 +12,49 @@ class AtividadesController {
         const response = database.query(query, queryParams, (err, response) => { { err, response } });
 
         if (response.err) {
-            res.status(404).send(`Erro ao criar atividade`);
+            console.log(err)
+            res.status(404).send(new ResponseDTO(404, `Erro ao criar atividade`));
         } else {
-            res.status(200).send(new ResponseDTO(200, "Atividade criada com sucesso"));
             console.log("Atividade criada com sucesso ...")
+            res.status(200).send(new ResponseDTO(200, "Atividade criada com sucesso"));
         }
     }
 
+    async update(req, res) {
+        const { id } = req.params
+        const { titulo, descricao } = req.body
+        console.log(`Trying update atividade ${id}`)
+
+        const query = "update atividades set titulo = ?, descricao = ? where id = ?"
+        database.query(query,
+            [titulo, descricao, id],
+            function (err, resp) {
+                if (err) {
+                    console.log(err)
+
+                    if (err.code == 'ER_DUP_ENTRY') {
+                        res.status(404).send(new ResponseDTO(404, "Email já cadastrado"))
+                    } else {
+                        res.status(404).send(new ResponseDTO(404, "Erro ao atualizar atividade"))
+                    }
+
+                } else {
+                    console.log("Success on list atividades")
+                    res.status(200).send(new ResponseDTO(200, "Atividade atualizada com sucesso"));
+                }
+            }
+        );
+    }
 
     async list(req, res) {
         console.log("Trying list atividades")
-        const query = `SELECT a.id, a.titulo, a.descricao, a.date FROM atividades a`
+        const query = `SELECT a.id, a.titulo, a.descricao, a.date FROM atividades a where a.deleted_at is null order by a.titulo asc`
 
         database.query(query,
             function (err, resp) {
                 if (err) {
-                    res.status(404).send("Erro ao listar atividades")
+                    console.log(err)
+                    res.status(404).send(new ResponseDTO(404, "Erro ao listar atividades"))
                 } else {
                     console.log("Success on list atividades")
                     res.status(200).send(new ResponseDTO(200, "Listagem de atividades comcluída", resp));
@@ -37,16 +64,19 @@ class AtividadesController {
     }
 
     async delete(req, res) {
-        const { id } = req.query;
-        const query = "update atividades set deleted_at = current_timestamp where atividades.id = $1::integer and atividades.deleted_at is null"
+        const { id } = req.params;
+        console.log(`Trying delete user ${id}`)
+        const query = "update atividades set deleted_at = current_timestamp where atividades.id = ?  and atividades.deleted_at is null"
 
         database.query(query, [id],
             function (err, resp) {
 
                 if (err) {
-                    res.status(404).send("Não foi deletar atividade.")
+                    console.log(err)
+                    res.status(404).send(new ResponseDTO(404, "Não foi deletar atividade."))
                 } else {
-                    res.status(200).send(`Atividade ${id} deletada`);
+                    console.log(`Atividade ${id} deletada com sucesso`)
+                    res.status(200).send(new ResponseDTO(200, `Atividade deletada`));
                 }
 
             }
